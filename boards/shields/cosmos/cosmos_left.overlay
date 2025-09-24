@@ -1,5 +1,5 @@
-#include "cosmos.dtsi"
-#include "cosmos-layouts.dtsi"
+#include "piantor.dtsi"
+#include "piantor-layouts.dtsi"
 
 /*
  Complains about not having "input property in peripheral input splits, but also don't recognise <&trackball> if I assign one. Hmmm.
@@ -7,25 +7,75 @@
  Or, move split input and listener stuffs into another .dtsi file.
 */
 
-/ {
-	chosen {
-		zmk,kscan = &kscan0;
-	};
+    chosen {
+        zmk,underglow = &led_strip;
+    };
 
-	kscan0: kscan {
-		compatible = "zmk,kscan-gpio-matrix";
-		diode-direction = "col2row";		
-		col-gpios =
-			<&gpio0  9 (GPIO_ACTIVE_HIGH)>, // col_0_left P0.09
-			<&gpio0 10 (GPIO_ACTIVE_HIGH)>, // col_1_left P0.10
-			<&gpio1 11 (GPIO_ACTIVE_HIGH)>, // col_2_left P1.11
-			<&gpio1 13 (GPIO_ACTIVE_HIGH)>, // col_3_left P1.13
-			<&gpio1 15 (GPIO_ACTIVE_HIGH)>; // col_4_left P1.15
-		row-gpios =
-			<&gpio1  6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>, // row_0_left P1.06
-			<&gpio1  4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>, // row_1_left P1.04
-			<&gpio0 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>, // row_2_left P0.11
-			<&gpio1  0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>; // row_3_left P1.00
-		wakeup-source;
-	};
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-direct";
+        wakeup-source;
+        input-gpios
+            = <&gpio0  7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0  9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio1  4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio1  2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio1  0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 29 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 31 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio1  6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 24 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0  2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio1 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 30 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0  5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio1  9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0  8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 28 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0  3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio1 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+        ;
+    };
+};
+
+&pinctrl {
+    spi3_default: spi3_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 26)>;
+        };
+    };
+
+    spi3_sleep: spi3_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 26)>;
+            low-power-enable;
+        };  
+    };
+};
+
+&spi3 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+
+    pinctrl-0 = <&spi3_default>;
+    pinctrl-1 = <&spi3_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    led_strip: ws2812@0 {
+        compatible = "worldsemi,ws2812-spi";
+
+        /* SPI */
+        reg = <0>; /* ignored, but necessary for SPI bindings */
+        spi-max-frequency = <4000000>;
+
+        /* WS2812 */
+        chain-length = <21>; /* number of LEDs */
+        spi-one-frame = <0x70>;
+        spi-zero-frame = <0x40>;
+        color-mapping = <LED_COLOR_ID_GREEN
+            LED_COLOR_ID_RED
+            LED_COLOR_ID_BLUE>;
+    };
 };
