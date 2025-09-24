@@ -14,6 +14,7 @@
 #include <piantor.dtsi>
 #include <piantor-layouts.dtsi>
 
+/ {
 &physical_layout {
     transform = <&default_transform>;
 };
@@ -32,6 +33,7 @@
     };
 
 };
+
 
 
 
