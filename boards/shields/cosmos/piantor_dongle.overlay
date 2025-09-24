@@ -11,6 +11,8 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
+#include <piantor.dtsi>
+#include <piantor-layouts.dtsi>
 
 &physical_layout {
     transform = <&default_transform>;
@@ -30,5 +32,6 @@
     };
 
 };
+
 
 
