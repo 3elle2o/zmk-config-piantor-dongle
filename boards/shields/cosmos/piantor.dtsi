@@ -1,19 +1,9 @@
 #include <nordic/nrf52840_qiaa.dtsi>
 #include <dt-bindings/zmk/matrix_transform.h>
 
-#include "piantor-layouts.dtsi"
-
-&default_layout {
-    transform = <&default_transform>;
-};
-
 / {
     chosen {
-        zephyr,code-partition = &code_partition;
-        zephyr,sram = &sram0;
-        zephyr,flash = &flash0;
-        zmk,kscan = &kscan0;
-        zmk,battery = &fuelgauge;
+        zmk,physical-layout = &physical_layout0;
     };
 
     default_transform: keymap_transform_0 {
@@ -133,6 +123,7 @@ nice_view_spi: &spi0 {
         };
     };
 };
+
 
 
 
