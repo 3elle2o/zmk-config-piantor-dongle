@@ -14,15 +14,14 @@
 #include <piantor.dtsi>
 #include <piantor-layouts.dtsi>
 
-/ {
-&physical_layout {
+&physical_layout0 {
     transform = <&default_transform>;
 };
 
 / {
     chosen {
         zmk,kscan = &mock_kscan;
-        zmk,physical-layout = &physical_layout;
+        zmk,physical-layout = &physical_layout0;
     };
 
     mock_kscan: kscan_1 {
@@ -33,6 +32,7 @@
     };
 
 };
+
 
 
 
