@@ -7,7 +7,7 @@ endif
 
 if SHIELD_PIANTOR_DONGLE
 config ZMK_KEYBOARD_NAME
-	default "Kai Cosmos"
+	default "Kai piantor"
 config ZMK_SPLIT_ROLE_CENTRAL
 	default y
 endif
@@ -17,3 +17,4 @@ config SPI
     default y
 
 endif
+
